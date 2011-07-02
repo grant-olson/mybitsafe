@@ -1,0 +1,4 @@
+body { font-family: sans-serif; }
+
+span.sidebar { width:10%; float:left; font-size:90%;height:100%; }
+span.body {float:left;}

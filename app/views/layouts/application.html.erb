@@ -8,25 +8,30 @@
 </head>
 <body>
 <h1>Bestcrow</h1>
-
+<% if user_signed_in? %>
+<p>Howdy, <%= current_user.email %></p>
+<% else %>
+<p>Welcome to bestcrwo...</p>
+<% end %>
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
 
+<span class='sidebar'>
 <% if user_signed_in? %>
-<p>Howdy, <%= current_user.email %></p>
+
 <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
 
 <%= link_to "Transactions", transactions_path %>
 <% else %>
-<p>Welcome to bestcrwo...</p>
  
 <%= link_to "Sign up", new_user_registration_path %>
 <%= link_to "Sign in", new_user_session_path %>
 <% end %>
+</span>
 
-
-
+<span class='body'>
 <%= yield %>
+</span>
 
 </body>
 </html>
