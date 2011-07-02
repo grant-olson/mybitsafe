@@ -82,8 +82,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  devise
-  log4r
+  devise (~> 1.4.2)
+  log4r (~> 1.1.9)
   rails (~> 3.0.9)
-  rest-client
+  rest-client (~> 1.6.3)
   sqlite3
