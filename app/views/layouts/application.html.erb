@@ -7,6 +7,23 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+<h1>Bestcrow</h1>
+
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
+
+<% if user_signed_in? %>
+<p>Howdy, <%= current_user.email %></p>
+<%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
+
+<% else %>
+<p>Welcome to bestcrwo...</p>
+ 
+<%= link_to "Sign up", new_user_registration_path %>
+<%= link_to "Sign in", new_user_session_path %>
+<% end %>
+
+
 
 <%= yield %>
 
