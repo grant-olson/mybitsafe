@@ -12,4 +12,10 @@ class TransactionsController < ApplicationController
     redirect_to transactions_path
   end
   
+  def show
+    @tx = Transactions.find(params[:id])
+    @unconfirmed_balance = Bitcoind.deal_balance @tx.tx_id, false
+    @confirmed_balance = Bitcoind.deal_balance @tx.tx_id, true
+  end
+  
 end

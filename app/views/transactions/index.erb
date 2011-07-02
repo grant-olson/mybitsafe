@@ -10,5 +10,7 @@
 
 <h1>Existing Transactions</h1>
 <% @txs.each do |tx| %>
-<p> <%= tx.note ? tx.note : "(no note)" %> -  <%= tx.release_address %></p>
+<p>
+  <%= link_to "#{ tx.note ? tx.note : '(no note)'} -  #{tx.release_address}", transaction_path(tx.id) %>
+</p>
 <% end %>
