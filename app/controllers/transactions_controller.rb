@@ -16,6 +16,12 @@ class TransactionsController < ApplicationController
     @tx = Transactions.find(params[:id])
     @unconfirmed_balance = Bitcoind.deal_balance @tx.tx_id, false
     @confirmed_balance = Bitcoind.deal_balance @tx.tx_id, true
+
+    if current_user &&  current_user.id == @tx.user_id
+      render :show_other
+      return
+    end
+    
   end
   
 end
