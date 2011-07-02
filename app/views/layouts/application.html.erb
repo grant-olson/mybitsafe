@@ -16,6 +16,7 @@
 <p>Howdy, <%= current_user.email %></p>
 <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
 
+<%= link_to "Transactions", transactions_path %>
 <% else %>
 <p>Welcome to bestcrwo...</p>
  

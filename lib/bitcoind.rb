@@ -1,4 +1,5 @@
 module Bitcoind
+
   CONN = ServiceProxy.new("http://grant:test@127.0.0.1:8332")
 
   def self.log4r

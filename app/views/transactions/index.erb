@@ -1,0 +1,11 @@
+<h1>Transactions</h1>
+
+<% form_for :transaction, :url => transactions_path do |tx_form| %>
+  <%= tx_form.label :release_address %>
+  <%= tx_form.text_field :release_address %>
+  <%= tx_form.submit "Create New Transaction" %>
+<% end %>
+
+<% @txs.each do |tx| %>
+<p> <%= tx.tx_id %> <%= tx.release_address %></p>
+<% end %>
