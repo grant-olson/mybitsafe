@@ -10,11 +10,6 @@
 
 <div class='header'>
 <h1>my.bit.safe</h1>
-<% if user_signed_in? %>
-<p>Howdy, <%= current_user.email %></p>
-<% else %>
-<p>Welcome to mybitsafe...</p>
-<% end %>
 </div>
 <div class='sidebar'>
 
@@ -29,6 +24,7 @@
 <%= link_to "Sign up", new_user_registration_path %>
 <%= link_to "Sign in", new_user_session_path %>
 <% end %>
+
 <a href='#'>About</a>
 <a href='#'>Contact</a>
 <a href='#'>Terms of Service</a>
@@ -36,6 +32,11 @@
 </div>
 
 <div class='body'>
+<% if user_signed_in? %>
+<p>Howdy, <%= current_user.email %></p>
+<% else %>
+<p>Welcome to mybitsafe...</p>
+<% end %>
 
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
