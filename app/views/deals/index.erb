@@ -1,0 +1,16 @@
+<h1>New Deal</h1>
+
+<% form_for :deal, :url => deals_path do |deal_form| %>
+  <%= deal_form.label :note %>
+  <%= deal_form.text_field :note %><br />
+  <%= deal_form.label :release_address %>
+  <%= deal_form.text_field :release_address %><br />
+  <%= deal_form.submit "Create New Deal" %>
+<% end %>
+
+<h1>Existing Deals</h1>
+<% @deals.each do |deal| %>
+<p>
+  <%= link_to "#{ deal.note ? deal.note : '(no note)'} -  #{deal.release_address}", deal_path(deal.id) %>
+</p>
+<% end %>

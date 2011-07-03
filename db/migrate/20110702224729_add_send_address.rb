@@ -1,9 +1,9 @@
 class AddSendAddress < ActiveRecord::Migration
   def self.up
-    add_column :transactions, :send_address, :string
+    add_column :deals, :send_address, :string
   end
 
   def self.down
-    remove_column :transactions, :send_address
+    remove_column :deals, :send_address
   end
 end
