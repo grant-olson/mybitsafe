@@ -2,9 +2,8 @@ module Bitcoind
 
   CONN = ServiceProxy.new("http://grant:test@127.0.0.1:8332")
   RAKE_RATE = 0.025
-  RAKE_ADDRESS = "muHHR6JNx2mJr1Rwa8n8K324u8YiHdAzdd"
   RAKE_ACCOUNT = "the_rake"
-  MIN_CONFIRMS = 1
+  MIN_CONFIRMS = 6
 
   def self.log4r
     Log4r::Logger['bitcoind']
