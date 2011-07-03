@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  deal_id: 1
+  tx_id: MyString
+  tx_type: MyString
+  debit: 9.99
+  credit: 9.99
+
+two:
+  deal_id: 1
+  tx_id: MyString
+  tx_type: MyString
+  debit: 9.99
+  credit: 9.99

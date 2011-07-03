@@ -10,10 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110703012734) do
+ActiveRecord::Schema.define(:version => 20110703194351) do
+
+  create_table "deal_line_items", :force => true do |t|
+    t.integer  "deal_id"
+    t.string   "tx_id"
+    t.string   "tx_type"
+    t.decimal  "debit"
+    t.decimal  "credit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "deals", :force => true do |t|
-    t.string   "deal_id"
+    t.string   "uuid"
     t.string   "release_address"
     t.datetime "created_at"
     t.datetime "updated_at"

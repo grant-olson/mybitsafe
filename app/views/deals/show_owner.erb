@@ -12,5 +12,18 @@ directly to this address or they will not be escrowed.</b></p>
 
 <p>When you are ready to release coins, click release button.</p>
 
+<h2>Deal History</h2>
 
+<table>
+<tr><th>Type</th><th>Debit</th><th>Credit</th><th>tx_id</th></tr>
+<% @deal.deal_line_items.each do |line_item| %>
 
+  <tr>
+    <td><%= line_item.tx_type %></td>
+    <td><%= line_item.debit %></td>
+    <td><%= line_item.credit %></td>
+    <td><%= line_item.tx_id %></td>
+  </tr>
+<% end %>
+
+</table>
