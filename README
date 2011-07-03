@@ -1,25 +1,18 @@
- Workflow.
+Todo
+====
 
-1. User logs in.
+*** Get full working system ***
 
-2. Initiates payment to an address.
+Setup proper validations on all models.
 
-   + must get release address.
-   + must create a unique 'account' for this.
-   + must save account and tx info.
+Setup proper security on all controllers.
 
-3. Deposits funds.
+Raise and handle app specific errors from lib/Bitcoind
 
-   + must detect this.  Set it in the db or just get it live?
-   + gettransactions.  Save new ones to the db.
+Move global options to lib/Config.
 
-4. We take our rake.  But only 0.025 per 100 BTC.
+Find hosting provider.
 
-   + Send rake offsite to me.
-   + need to track cummulative amount, so we don't double charge.
+Figure out how to do ssh only.
 
-5. Money sits there.
-
-6. Released, or forfeit to charity.
-
-   + Release funds from 'account' to address.
+Create release page.
