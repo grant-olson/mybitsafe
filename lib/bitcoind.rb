@@ -30,6 +30,15 @@ module Bitcoind
     res
   end
   
+  def self.deal_unconfirmed_balance deal_name
+    transactions = deal_transactions deal_name, false
+    unconfirmed_recv_txs = transactions.select { |tx| tx['category'] == 'receive' && tx['confirmations'] == 0 }
+
+    return 0 if unconfirmed_recv_txs.nil? || unconfirmed_recv_txs.empty?
+
+    unconfirmed_recv_txs.inject { |a,b| a + b}
+  end
+  
   def self.deal_transactions deal_name, confirmed = true
     log4r.info("Getting transactions for #{deal_name}")
     min_confirms = MIN_CONFIRMS
