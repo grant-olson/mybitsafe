@@ -32,8 +32,10 @@ module Bitcoind
   def self.deal_transactions deal_name, confirmed = true
     log4r.info("Getting transactions for #{deal_name}")
     min_confirms = MIN_CONFIRMS
-    min_confrims = 0 if confirmed != true
-    res = CONN.listtransactions.call deal_name, 100, min_confirms
+    min_confirms = 0 if confirmed != true
+    log4r.info "CMD listtransactions #{deal_name} 100 #{min_confirms}"
+    res = CONN.listtransactions.call deal_name, 100, 0
+    res = res.select { |r| r['category'] == 'send' || r['confirmations'] >= min_confirms }
     log4r.info("GOT #{res.inspect}")
     return res
   end
