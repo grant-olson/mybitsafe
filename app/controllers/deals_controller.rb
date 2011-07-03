@@ -16,8 +16,8 @@ class DealsController < ApplicationController
     @deal = Deal.find_by_uuid(params[:uuid])
     @deal.sync_books
 
-    @unconfirmed_balance = @deal.line_item_balance
-    @confirmed_balance = Bitcoind.deal__unconfirmed_balance @deal.uuid
+    @unconfirmed_balance = Bitcoind.deal_unconfirmed_balance @deal.uuid
+    @confirmed_balance = @deal.line_item_balance
 
     if current_user &&  current_user.id == @deal.user_id
       render :show_owner
