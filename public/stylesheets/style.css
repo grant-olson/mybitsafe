@@ -1,4 +1,13 @@
-body { font-family: sans-serif; }
+body { font-family: sans-serif; font-size:90%; padding:0%;margin:0%;border:0%}
 
-span.sidebar { width:10%; float:left; font-size:90%;height:100%; }
-span.body {float:left;}
+h1, h2, h3, h4, h5, h6 {font-family: monospace;}
+h1 { background-color:navy; color:yellow; padding:2.5%; font-style:italic; }
+
+div.sidebar { width:10%; float:left; font-size:90%;}
+div.body {float:right;width:85%;border:2.5%;margin:2.5%;margin-top:0%}
+div.footer { clear:both; }
+
+div.sidebar_menu {background-color:navy; color:yellow; margin:5%;padding:5% }
+div.sidebar_menu a { color:yellow; font-weight:bold; }
+
+p.escrow_address {font-weight:bold; background-color:#CCC;padding:0.25em;text-align:center;display:inline;margin-left:auto;margin-right:auto}

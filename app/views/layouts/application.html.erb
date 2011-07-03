@@ -7,16 +7,18 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+
+<div class='header'>
 <h1>my.bit.safe</h1>
 <% if user_signed_in? %>
 <p>Howdy, <%= current_user.email %></p>
 <% else %>
 <p>Welcome to mybitsafe...</p>
 <% end %>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+</div>
+<div class='sidebar'>
 
-<span class='sidebar'>
+<div class='sidebar_menu'>
 <% if user_signed_in? %>
 
 <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
@@ -27,11 +29,22 @@
 <%= link_to "Sign up", new_user_registration_path %>
 <%= link_to "Sign in", new_user_session_path %>
 <% end %>
-</span>
+<a href='#'>About</a>
+<a href='#'>Contact</a>
+<a href='#'>Terms of Service</a>
+</div>
+</div>
 
-<span class='body'>
+<div class='body'>
+
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
+
 <%= yield %>
-</span>
+</div>
 
+<div class='footer'>
+  About | blah | ToS | foo
+</div>
 </body>
 </html>
