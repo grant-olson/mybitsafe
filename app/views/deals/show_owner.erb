@@ -1,0 +1,16 @@
+<h1>Deal</h1>
+
+<p>Unconfirmed Balance: <%= @unconfirmed_balance %></p>
+<p>Confirmed Balance: <%= @confirmed_balance %></p>
+
+<p>Add coins by sending to <%= @deal.send_address %>.  This is the
+<b>Escrow</b> address.  Funds will be held here until released</p>
+
+<p>Funds will be sent to <%= @deal.release_address %> when released.
+This is the <b>Release</b> address.</p> <p><b>Do not send funds
+directly to this address or they will not be escrowed.</b></p>
+
+<p>When you are ready to release coins, click release button.</p>
+
+
+

@@ -18,7 +18,7 @@ class DealsController < ApplicationController
     @confirmed_balance = Bitcoind.deal_balance @deal.deal_id, true
 
     if current_user &&  current_user.id == @deal.user_id
-      render :show_other
+      render :show_owner
       return
     end
     
