@@ -67,5 +67,23 @@ module Bitcoind
       log4r.info("Rake is covered")
     end
   end
+
+  def self.deal_pay deal_name, amount
+    deal_rake deal_name
+
+    dest_addr = deal_name.split("_")[-1]
+    log4r.info("Address extracted from name is #{dest_addr}")
+    
+    balance = CONN.getbalance.call deal_name
+    log4r.info("Got balance of #{balance}")
+
+    raise "AAAAA" if balance < amount
+
+    log4r.info("We've got enough funds to cover it")
+
+    res = CONN.sendfrom.call deal_name, dest_addr, amount
+    log4r.info("Sent #{amount} from #{deal_name} to #{dest_addr}")
+    log4r.info("GOT REPLY #{res}")
+  end
   
 end
