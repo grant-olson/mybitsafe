@@ -3,6 +3,7 @@ module Bitcoind
   CONN = ServiceProxy.new("http://grant:test@127.0.0.1:8332")
   RAKE_RATE = 0.025
   RAKE_ADDRESS = "muHHR6JNx2mJr1Rwa8n8K324u8YiHdAzdd"
+  RAKE_ACCOUNT = "the_rake"
   MIN_CONFIRMS = 1
 
   def self.log4r
@@ -24,7 +25,7 @@ module Bitcoind
     min_confs = 0 if confirmed == false
 
     log4r.info("Getting #{confirmed ? "confirmed" : "unconfirmed"} balance for account #{deal_name}...")
-    res = CONN.getreceivedbyaccount.call(deal_name,min_confs)
+    res = CONN.getbalance.call(deal_name,min_confs)
     log4r.info("Result #{res}")
     res
   end
@@ -35,7 +36,7 @@ module Bitcoind
     min_confirms = 0 if confirmed != true
     log4r.info "CMD listtransactions #{deal_name} 100 #{min_confirms}"
     res = CONN.listtransactions.call deal_name, 100, 0
-    res = res.select { |r| r['category'] == 'send' || r['confirmations'] >= min_confirms }
+    res = res.select { |r| r['category'] == 'send' || r['category'] == 'move' || r['confirmations'] >= min_confirms }
     log4r.info("GOT #{res.inspect}")
     return res
   end
@@ -49,8 +50,8 @@ module Bitcoind
     total_received = 0 if total_received.nil?
     log4r.info ("Total received #{total_received}")
 
-    rake_taken = transactions.select { |tx| tx['category'] == "send" && tx["address"] == RAKE_ADDRESS }
-      rake_taken = rake_taken.map { |x| x['amount'] }
+    rake_taken = transactions.select { |tx| tx['category'] == "move" && tx["address"] == RAKE_ACCOUNT }
+    rake_taken = rake_taken.map { |x| x['amount'] }
     total_raked = rake_taken.inject { |a,b| a + b}
     total_raked = 0 if total_raked.nil?
     total_raked = -total_raked
@@ -63,8 +64,8 @@ module Bitcoind
     if expected_rake > total_raked
       new_rake = expected_rake - total_raked
       log4r.info("Need to rake #{new_rake}")
-      log4r.info("cmd: sendfrom #{deal_name}, #{RAKE_ADDRESS}, #{new_rake}")
-      CONN.sendfrom.call deal_name, RAKE_ADDRESS, new_rake
+      log4r.info("cmd: move #{deal_name}  #{RAKE_ACCOUNT}, #{new_rake}")
+      CONN.move.call deal_name, RAKE_ACCOUNT, new_rake
     else
       log4r.info("Rake is covered")
     end
