@@ -11,6 +11,6 @@
 <h1>Existing Deals</h1>
 <% @deals.each do |deal| %>
 <p>
-  <%= link_to "#{ deal.note ? deal.note : '(no note)'} -  #{deal.release_address}", deal_path(deal.id) %>
+  <%= link_to "#{ deal.note ? deal.note : '(no note)'} -  #{deal.release_address}", deal_path(deal.uuid) %>
 </p>
 <% end %>

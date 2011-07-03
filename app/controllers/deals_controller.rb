@@ -13,7 +13,7 @@ class DealsController < ApplicationController
   end
   
   def show
-    @deal = Deal.find(params[:id])
+    @deal = Deal.find_by_uuid(params[:uuid])
     @deal.sync_books
 
     @unconfirmed_balance = Bitcoind.deal_balance @deal.uuid, false

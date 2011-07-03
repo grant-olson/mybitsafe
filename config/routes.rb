@@ -15,8 +15,11 @@ Bestcrow::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  resources :deals
-
+#  resources :deals
+  match '/deals(.:format)', :controller => :deals, :action => :index, :as => :deals, :via => :get
+  match '/deals(.:format)', :controller => :deals, :action => :create, :via => :post
+  match '/deals/new(.:format)', :controller => :deals, :action => :new, :as => :new_deal, :via => :get
+  match '/deals/:uuid(.:format)', :controller => :deals, :action => :show, :as => :deal, :via => :get
   # Sample resource route with options:
   #   resources :products do
   #     member do

@@ -12,8 +12,8 @@ module Bitcoind
   def self.new_deal user, destination_address
     log4r.info("Validating address #{destination_address}")
     CONN.validateaddress.call destination_address
-    deal_name = "#{user}_#{destination_address}"
-    log4r.info("Creating new deal for #{user} to #{destination_address}")
+    deal_name = UUIDTools::UUID.random_create.to_s
+    log4r.info("Creating new deal #{deal_name} for #{user} to #{destination_address}")
     address = CONN.getnewaddress.call deal_name
     log4r.info("Got address #{address}")
     [deal_name, address]
