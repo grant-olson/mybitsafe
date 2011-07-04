@@ -12,4 +12,4 @@ div.sidebar_menu a { color:yellow; font-weight:bold; }
 
 p.escrow_address {font-weight:bold; background-color:#CCC;padding:0.25em;text-align:center;display:inline;margin-left:auto;margin-right:auto}
 
-p.notice, p.alert {background-color:#CCC;border-color:black;color:red;}
+p.notice, p.alert {background-color:#CCC;border-color:black;color:red;font-weight:bold;}
