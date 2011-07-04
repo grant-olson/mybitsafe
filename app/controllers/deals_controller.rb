@@ -10,8 +10,8 @@ class DealsController < ApplicationController
     Deal.create :user_id => current_user.id, :uuid => deal_name, :send_address => address, :release_address => release_address, :note => params[:deal][:note]
 
     redirect_to deals_path
-  rescue Bitcoind::BitcoindDown => ex
-    flash[:alert] = "Unable to create deal because the bitcoin server is down."
+  rescue Bitcoind::BitcoindDown, Bitcoind::InvalidBitcoinAddress => ex
+    flash.now[:alert] = "ERROR: " + ex.message
     @deals = Deal.find_all_by_user_id(current_user.id)
 
     render :index

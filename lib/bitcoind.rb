@@ -6,6 +6,7 @@ module Bitcoind
   MIN_CONFIRMS = 6
 
   class BitcoindDown < StandardError;end
+  class InvalidBitcoinAddress < StandardError;end
 
   def self.log4r
     Log4r::Logger['bitcoind']
@@ -13,7 +14,7 @@ module Bitcoind
 
   def self.rewrite_exception ex
     if ex.class == Errno::ECONNREFUSED
-      raise BitcoindDown, ex.message
+      raise BitcoindDown, "Unable to process request because the bitcoin daemon is down"
     else
       raise ex
     end
@@ -22,7 +23,10 @@ module Bitcoind
   
   def self.new_deal user, destination_address
     log4r.info("Validating address #{destination_address}")
-    CONN.validateaddress.call destination_address
+
+    res = CONN.validateaddress.call destination_address
+    raise InvalidBitcoinAddress, "You have provided an invalid bitcoin address." if res['isvalid'] == false
+
     deal_name = UUIDTools::UUID.random_create.to_s
     log4r.info("Creating new deal #{deal_name} for #{user} to #{destination_address}")
     address = CONN.getnewaddress.call deal_name
