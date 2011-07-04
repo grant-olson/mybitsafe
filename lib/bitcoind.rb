@@ -35,7 +35,10 @@ module Bitcoind
 
     return 0 if unconfirmed_recv_txs.nil? || unconfirmed_recv_txs.empty?
 
-    unconfirmed_recv_txs.inject { |a,b| a + b}
+    amounts = unconfirmed_recv_txs.map { |tx| tx['amount'] }
+
+    res = amounts.reduce { |a,b| a + b}
+    res
   end
   
   def self.deal_transactions deal_name, confirmed = true
