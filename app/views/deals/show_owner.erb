@@ -12,6 +12,10 @@
 
 <p>When you are ready to release coins, click release button.</p>
 
+<%= form_for @deal, :url => deal_release_path(@deal.uuid) do |deal_form| %>
+<%= deal_form.submit "Release", :confirm => "Are you sure you want to release all coins?" %>
+<% end %>
+
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <hr />

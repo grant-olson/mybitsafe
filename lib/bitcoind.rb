@@ -3,7 +3,7 @@ module Bitcoind
   CONN = ServiceProxy.new("http://grant:test@127.0.0.1:8332")
   RAKE_RATE = 0.025
   RAKE_ACCOUNT = "the_rake"
-  MIN_CONFIRMS = 6
+  MIN_CONFIRMS = 1
 
   class BitcoindDown < StandardError;end
   class InvalidBitcoinAddress < StandardError;end
@@ -84,7 +84,7 @@ module Bitcoind
     total_received = 0 if total_received.nil?
     log4r.info ("Total received #{total_received}")
 
-    rake_taken = transactions.select { |tx| tx['category'] == "move" && tx["address"] == RAKE_ACCOUNT }
+    rake_taken = transactions.select { |tx| tx['category'] == "move" && tx["otheraccount"] == RAKE_ACCOUNT }
     rake_taken = rake_taken.map { |x| x['amount'] }
     total_raked = rake_taken.inject { |a,b| a + b}
     total_raked = 0 if total_raked.nil?
@@ -107,14 +107,13 @@ module Bitcoind
     rewrite_exception ex
   end
 
-  def self.deal_pay deal_name, amount
+  def self.deal_pay deal_name, dest_addr,  amount
     deal_rake deal_name
 
-    dest_addr = deal_name.split("_")[-1]
     log4r.info("Address extracted from name is #{dest_addr}")
     
     balance = CONN.getbalance.call deal_name
-    log4r.info("Got balance of #{balance}")
+    log4r.info("Got balance of #{balance}, amount to withdraw is #{amount}")
 
     raise "AAAAA" if balance < amount
 

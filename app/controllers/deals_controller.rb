@@ -36,4 +36,11 @@ class DealsController < ApplicationController
     
   end
   
+  def release
+    deal = Deal.find_by_uuid(params[:uuid])
+    deal.log4r.info ("LINE ITEM BALANCE #{deal.line_item_balance}")
+    Bitcoind.deal_pay deal.uuid, deal.release_address, deal.line_item_balance
+    redirect_to deals_show_path
+  end
+  
 end
