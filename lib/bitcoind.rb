@@ -5,9 +5,20 @@ module Bitcoind
   RAKE_ACCOUNT = "the_rake"
   MIN_CONFIRMS = 6
 
+  class BitcoindDown < StandardError;end
+
   def self.log4r
     Log4r::Logger['bitcoind']
   end
+
+  def self.rewrite_exception ex
+    if ex.class == Errno::ECONNREFUSED
+      raise BitcoindDown, ex.message
+    else
+      raise ex
+    end
+  end
+  
   
   def self.new_deal user, destination_address
     log4r.info("Validating address #{destination_address}")
@@ -17,6 +28,8 @@ module Bitcoind
     address = CONN.getnewaddress.call deal_name
     log4r.info("Got address #{address}")
     [deal_name, address]
+  rescue Exception => ex
+    rewrite_exception ex
   end
   
   def self.deal_balance deal_name, confirmed = true
@@ -27,6 +40,8 @@ module Bitcoind
     res = CONN.getbalance.call(deal_name,min_confs)
     log4r.info("Result #{res}")
     res
+  rescue Exception => ex
+    rewrite_exception ex
   end
   
   def self.deal_unconfirmed_balance deal_name
@@ -39,6 +54,8 @@ module Bitcoind
 
     res = amounts.reduce { |a,b| a + b}
     res
+  rescue Exception => ex
+    rewrite_exception ex
   end
   
   def self.deal_transactions deal_name, confirmed = true
@@ -50,6 +67,8 @@ module Bitcoind
     res = res.select { |r| r['category'] == 'send' || r['category'] == 'move' || r['confirmations'] >= min_confirms }
     log4r.info("GOT #{res.inspect}")
     return res
+  rescue Exception => ex
+    rewrite_exception ex
   end
 
   def self.deal_rake deal_name
@@ -80,6 +99,8 @@ module Bitcoind
     else
       log4r.info("Rake is covered")
     end
+  rescue Exception => ex
+    rewrite_exception ex
   end
 
   def self.deal_pay deal_name, amount
@@ -98,6 +119,8 @@ module Bitcoind
     res = CONN.sendfrom.call deal_name, dest_addr, amount
     log4r.info("Sent #{amount} from #{deal_name} to #{dest_addr}")
     log4r.info("GOT REPLY #{res}")
+  rescue Exception => ex
+    rewrite_exception ex
   end
   
 end

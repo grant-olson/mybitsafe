@@ -10,13 +10,23 @@ class DealsController < ApplicationController
     Deal.create :user_id => current_user.id, :uuid => deal_name, :send_address => address, :release_address => release_address, :note => params[:deal][:note]
 
     redirect_to deals_path
+  rescue Bitcoind::BitcoindDown => ex
+    flash[:alert] = "Unable to create deal because the bitcoin server is down."
+    @deals = Deal.find_all_by_user_id(current_user.id)
+
+    render :index
   end
   
   def show
     @deal = Deal.find_by_uuid(params[:uuid])
     @deal.sync_books
 
-    @unconfirmed_balance = Bitcoind.deal_unconfirmed_balance @deal.uuid
+    begin
+      @unconfirmed_balance = Bitcoind.deal_unconfirmed_balance @deal.uuid
+    rescue Bitcoind::BitcoindDown => ex
+      @unconfirmed_balance = "????"
+    end
+    
     @confirmed_balance = @deal.line_item_balance
 
     if current_user &&  current_user.id == @deal.user_id

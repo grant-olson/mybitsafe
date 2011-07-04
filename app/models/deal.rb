@@ -41,6 +41,8 @@ class Deal < ActiveRecord::Base
         raise ArgumentError, "Unknown category type #{tx['category']}..."
       end
     end
+  rescue Bitcoind::BitcoindDown => ex
+    nil # Fail gracefully.
   end
 
   def line_item_balance
