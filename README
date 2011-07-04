@@ -11,8 +11,10 @@ Raise and handle app specific errors from lib/Bitcoind
 
 Move global options to lib/Config.
 
+DB indexes and what not.
+
 Find hosting provider.
 
-Figure out how to do ssh only.
+Figure out how to do https only.
 
 Create release page.
