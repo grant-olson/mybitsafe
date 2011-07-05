@@ -19,7 +19,8 @@ class DealsController < ApplicationController
   
   def show
     @deal = Deal.find_by_uuid(params[:uuid])
-    @deal.sync_books
+    @deal.move_deposits_to_reserve
+    @deal.take_rake
 
     begin
       @unconfirmed_balance = Bitcoind.deal_unconfirmed_balance @deal.uuid

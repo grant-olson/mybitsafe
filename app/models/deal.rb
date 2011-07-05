@@ -5,52 +5,66 @@ class Deal < ActiveRecord::Base
     Log4r::Logger['deals']
   end
   
-  def sync_books
-    log4r.info "Seeing if we need to get rake..."
-    Bitcoind.deal_rake self.uuid
-
-    log4r.info "Looking up transactions #{self.uuid}...."
+  def move_deposits_to_reserve
+    log4r.info "Moving new deposits to reserve..."
     transactions = Bitcoind.deal_transactions self.uuid
 
-    transactions.each do |tx|
-      if deal_line_items.find_by_tx_id(tx['txid'])
-        log4r.info("Skipping... Transaction #{tx['tx_id']} is already recorded...")
-        next
-      end
+    receive = transactions.select { |tx| tx['category'] == 'receive' }
+    send = transactions.select { |tx| tx['category'] == 'send'}
+    move = transactions.select { |tx| tx['categiry'] == 'move' }
+    
+    raise "Crazy category" if transactions.length != (receive.length + send.length + move.length)
+    raise "How'd we get a send" if send.length > 0
 
-      if tx['category'] == 'receive'
-        log4r.info "Deposit..."
-        deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :fee => 0, :tx_type => "DEPOSIT"
-      elsif tx['category'] == 'move'
-        log4r.info "Rake Transaction..."
-        deal_line_items.create :tx_id => tx['txid'], :debit => -tx['amount'], :credit => 0, :fee => 0, :tx_type => "RAKE"
+    confirmed_receive = receive.select { |tx| tx['confirmations'] >= Bitcoind::MIN_CONFIRMS }
+    log4r.info "Received #{receive.length} transactions, #{confirmed_receive.length} confirmed..."
 
-      elsif tx['category'] == 'send'
+    move_ids = {}
+    move.each do |mv|
+      move_ids[mv['comment']] == move
+    end
 
-        fee = tx['fee']
-        fee = 0 if fee.nil?
-        fee = - fee
-
-        if tx['address'] == release_address
-          log4r.info "Release Transaction..."
-          deal_line_items.create :tx_id => tx['txid'], :debit => tx['amount'], :credit => 0, :fee => fee, :tx_type => "RELEASE"
-        else
-          log4r.error "SUSPICIOUS TRANSACTION.  NOT THE RELEASE ADDRESS.  #{tx['address']}"
-        end
+    confirmed_receive.each do |tx|
+      if move.has_key? tx['txid']
+        log "Already moved #{tx['txid']}, skipping..."
       else
-        raise ArgumentError, "Unknown category type #{tx['category']}..."
+        log "Didn't move #{tx['txid']} yet, moving..."
+        Bitcoind.deal_move_deposit uuid, tx['amount'], tx['txid']
+        deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :tx_type => "DEPOSIT"
+        ReserveLineItem.new :credit => tx['amount'], :debit => 0, :note => tx['txid']
       end
     end
-  rescue Bitcoind::BitcoindDown => ex
-    nil # Fail gracefully.
+    
   end
 
-  def line_item_balance
-    amounts = deal_line_items.map do |li|
-      fee = li.fee
-      fee = 0 if li.fee.nil?
+  def take_rake
+    log4r.info "Taking rake..."
 
-      li.credit - li.debit - fee
+    total_deposits = line_item_deposits.to_i
+    hundreds = (total_deposits / 100) + 1
+    expected_rake = hundreds.to_f * 0.025
+    log4r.info "Total Deposits #{total_deposits}, expected rake #{expected_rake}..."
+    
+    total_rake = rake_line_items
+    log4r.info "Current rake #{total_rake}"
+
+    remaining_rake = expected_rake - total_rake
+
+    if remaining_rake > 0
+      log4r.info "Taking rake"
+      deal_line_items.create :tx_id => tx['txid'], :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
+      RakeLineItems.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{deal.uuid}"
+    else
+      log4r.info "Rake good.  Skipping"
+    end
+    
+  end
+
+  def line_item_rakes
+    rake_line_items = deal_line_items.select { |li| li.tx_type == "RAKE" }
+
+    amounts = rake_line_items.map do |li|
+      li.debit
     end
     
     return 0.0 if amounts.nil? or amounts.empty?
@@ -58,14 +72,14 @@ class Deal < ActiveRecord::Base
     return amounts.reduce { |a,b| a + b}
   end
   
-  def books_balance?
-    lib = line_item_balance
-    db = Bitcoind.deal_balance uuid
-
-    log4r.info "Comparing line_item_balance #{line_item_balance} to bitcoin_balance #{db}"
-    res = (lib == db)
-    log4r.info (res == true ? "they are equal" : "they are not equal")
-    res
+  def line_item_balance
+    amounts = deal_line_items.map do |li|
+      li.credit - li.debit
+    end
+    
+    return 0.0 if amounts.nil? or amounts.empty?
+    
+    return amounts.reduce { |a,b| a + b}
   end
   
 end

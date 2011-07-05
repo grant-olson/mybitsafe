@@ -4,7 +4,9 @@ module Bitcoind
   RAKE_RATE = 0.025
   RAKE_ACCOUNT = "the_rake"
   MIN_CONFIRMS = 1
-
+  RESERVE_ACCOUNT = "9f2690a1-f6fc-45c1-b40d-3950d1954e6d"   
+  RESERVE_ADDRESS = "mqbYXNi4jua39aReisT7ZatbwVdMmupKNP"
+  
   class BitcoindDown < StandardError;end
   class InvalidBitcoinAddress < StandardError;end
 
@@ -126,4 +128,9 @@ module Bitcoind
     rewrite_exception ex
   end
   
+  def deal_move_deposit deal_name, amount, tx
+    log4r.info "Moving #{amount} from #{deal_name} to reserve..."
+    CONN.move.call deal_name, RESERVE_ACCOUNT, amount, MIN_CONFIRMS, tx 
+  end
+
 end

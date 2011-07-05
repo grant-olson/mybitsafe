@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  debit: 9.99
+  credit: 9.99
+  note: MyString
+
+two:
+  debit: 9.99
+  credit: 9.99
+  note: MyString

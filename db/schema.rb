@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110703212609) do
+ActiveRecord::Schema.define(:version => 20110705012059) do
 
   create_table "deal_line_items", :force => true do |t|
     t.integer  "deal_id"
@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(:version => 20110703212609) do
     t.decimal  "credit"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "fee"
   end
 
   create_table "deals", :force => true do |t|
@@ -31,6 +30,22 @@ ActiveRecord::Schema.define(:version => 20110703212609) do
     t.integer  "user_id"
     t.string   "note"
     t.string   "send_address"
+  end
+
+  create_table "rake_line_items", :force => true do |t|
+    t.decimal  "debit"
+    t.decimal  "credit"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reserve_line_items", :force => true do |t|
+    t.decimal  "debit"
+    t.decimal  "credit"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
