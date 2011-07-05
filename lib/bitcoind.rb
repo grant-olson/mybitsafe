@@ -114,21 +114,16 @@ module Bitcoind
 
     log4r.info("Address extracted from name is #{dest_addr}")
     
-    balance = CONN.getbalance.call deal_name
-    log4r.info("Got balance of #{balance}, amount to withdraw is #{amount}")
-
-    raise "AAAAA" if balance < amount
-
     log4r.info("We've got enough funds to cover it")
 
-    res = CONN.sendfrom.call deal_name, dest_addr, amount
+    res = CONN.sendfrom.call RESERVE_ADDRESS, dest_addr, amount
     log4r.info("Sent #{amount} from #{deal_name} to #{dest_addr}")
     log4r.info("GOT REPLY #{res}")
   rescue Exception => ex
     rewrite_exception ex
   end
   
-  def deal_move_deposit deal_name, amount, tx
+  def self.deal_move_deposit deal_name, amount, tx
     log4r.info "Moving #{amount} from #{deal_name} to reserve..."
     CONN.move.call deal_name, RESERVE_ACCOUNT, amount, MIN_CONFIRMS, tx 
   end

@@ -11,9 +11,9 @@ class Deal < ActiveRecord::Base
 
     receive = transactions.select { |tx| tx['category'] == 'receive' }
     send = transactions.select { |tx| tx['category'] == 'send'}
-    move = transactions.select { |tx| tx['categiry'] == 'move' }
+    move = transactions.select { |tx| tx['category'] == 'move' }
     
-    raise "Crazy category" if transactions.length != (receive.length + send.length + move.length)
+    raise "Crazy category #{transactions.length} #{receive.length} #{move.length} #{send.inspect}" if transactions.length != (receive.length + send.length + move.length)
     raise "How'd we get a send" if send.length > 0
 
     confirmed_receive = receive.select { |tx| tx['confirmations'] >= Bitcoind::MIN_CONFIRMS }
@@ -21,14 +21,15 @@ class Deal < ActiveRecord::Base
 
     move_ids = {}
     move.each do |mv|
-      move_ids[mv['comment']] == move
+      move_ids[mv['comment']] = move
     end
 
+ #   raise move_ids.keys.inspect + " " + confirmed_receive.first.inspect
     confirmed_receive.each do |tx|
-      if move.has_key? tx['txid']
-        log "Already moved #{tx['txid']}, skipping..."
+      if move_ids.has_key? tx['txid']
+        log4r.info "Already moved #{tx['txid']}, skipping..."
       else
-        log "Didn't move #{tx['txid']} yet, moving..."
+        log4r.info "Didn't move #{tx['txid']} yet, moving..."
         Bitcoind.deal_move_deposit uuid, tx['amount'], tx['txid']
         deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :tx_type => "DEPOSIT"
         ReserveLineItem.new :credit => tx['amount'], :debit => 0, :note => tx['txid']
@@ -59,7 +60,7 @@ class Deal < ActiveRecord::Base
     if remaining_rake > 0
       log4r.info "Taking rake"
       deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
-      RakeLineItem.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{deal.uuid}"
+      RakeLineItem.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}"
     else
       log4r.info "Rake good.  Skipping"
     end
@@ -80,7 +81,7 @@ class Deal < ActiveRecord::Base
   
   def line_item_deposits
     amounts = deal_line_items.map do |li|
-      li.debit
+      li.credit
     end
     
     return 0.0 if amounts.nil? or amounts.empty?
@@ -93,7 +94,7 @@ class Deal < ActiveRecord::Base
       li.credit - li.debit
     end
     
-    return 0.0 if amounts.nil? or amounts.empty?
+    return 0.0 if amounts.nil? || amounts.empty?
     
     return amounts.reduce { |a,b| a + b}
   end
