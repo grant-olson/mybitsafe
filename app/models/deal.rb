@@ -41,19 +41,25 @@ class Deal < ActiveRecord::Base
     log4r.info "Taking rake..."
 
     total_deposits = line_item_deposits.to_i
+
+    if total_deposits == 0
+      log4r.info "No deposits yet... No rake"
+      return
+    end
+    
     hundreds = (total_deposits / 100) + 1
     expected_rake = hundreds.to_f * 0.025
     log4r.info "Total Deposits #{total_deposits}, expected rake #{expected_rake}..."
     
-    total_rake = rake_line_items
+    total_rake = line_item_rakes
     log4r.info "Current rake #{total_rake}"
 
     remaining_rake = expected_rake - total_rake
 
     if remaining_rake > 0
       log4r.info "Taking rake"
-      deal_line_items.create :tx_id => tx['txid'], :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
-      RakeLineItems.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{deal.uuid}"
+      deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
+      RakeLineItem.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{deal.uuid}"
     else
       log4r.info "Rake good.  Skipping"
     end
@@ -64,6 +70,16 @@ class Deal < ActiveRecord::Base
     rake_line_items = deal_line_items.select { |li| li.tx_type == "RAKE" }
 
     amounts = rake_line_items.map do |li|
+      li.debit
+    end
+    
+    return 0.0 if amounts.nil? or amounts.empty?
+    
+    return amounts.reduce { |a,b| a + b}
+  end
+  
+  def line_item_deposits
+    amounts = deal_line_items.map do |li|
       li.debit
     end
     
