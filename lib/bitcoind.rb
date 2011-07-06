@@ -4,8 +4,8 @@ module Bitcoind
   RAKE_RATE = 0.025
   RAKE_ACCOUNT = "the_rake"
   MIN_CONFIRMS = 1
-  RESERVE_ACCOUNT = "9f2690a1-f6fc-45c1-b40d-3950d1954e6d"   
-  RESERVE_ADDRESS = "mqbYXNi4jua39aReisT7ZatbwVdMmupKNP"
+  RESERVE_ACCOUNT = "0d99c148-21fa-4861-9ad8-a05f1f9c24a2"
+
   
   class BitcoindDown < StandardError;end
   class InvalidBitcoinAddress < StandardError;end
