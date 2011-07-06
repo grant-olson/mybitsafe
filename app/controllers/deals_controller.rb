@@ -41,7 +41,7 @@ class DealsController < ApplicationController
     deal = Deal.find_by_uuid(params[:uuid])
     coins = deal.line_item_balance
     deal.release deal.line_item_balance
-    flash[:alert] = "Released #{coins} to #{release_address}..."
+    flash[:alert] = "Released #{coins} to #{deal.release_address}..."
     redirect_to deals_path
   rescue Bitcoind::BitcoindRefusedRequest => ex
     flash[:alert] = "ERROR: #{ex.message}"
