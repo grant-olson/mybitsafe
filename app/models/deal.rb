@@ -67,6 +67,15 @@ class Deal < ActiveRecord::Base
     
   end
 
+  def release amount
+    log4r.info ("Releasing #{amount}  via bitcoind...")
+    Bitcoind.deal_pay uuid, release_address, amount
+    log4r.info ("Adding debit to deal line items...")
+    deal_line_items.create :debit => amount, :credit => 0, :tx_type => "RELEASE"
+    log4r.info ("Adding debit to reserve account...")
+    RakeLineItem.new :debit => amount, :credit => 0, :note => "Release for #{uuid}"
+  end
+
   def line_item_rakes
     rake_line_items = deal_line_items.select { |li| li.tx_type == "RAKE" }
 
