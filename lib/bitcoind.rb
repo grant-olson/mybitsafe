@@ -9,6 +9,7 @@ module Bitcoind
   
   class BitcoindDown < StandardError;end
   class InvalidBitcoinAddress < StandardError;end
+  class BitcoindRefusedRequest < StandardError;end
 
   def self.log4r
     Log4r::Logger['bitcoind']
@@ -17,6 +18,11 @@ module Bitcoind
   def self.rewrite_exception ex
     if ex.class == Errno::ECONNREFUSED
       raise BitcoindDown, "Unable to process request because the bitcoin daemon is down"
+    elsif ex.class == RestClient::InternalServerError
+      response = ActiveSupport::JSON.decode(ex.response)
+      code = response['error']['code']
+      msg = response['error']['message']
+      raise BitcoindRefusedRequest, "The bitcoin server refused this request.  Reason: '#{msg}' (#{code})"
     else
       raise ex
     end
@@ -116,7 +122,8 @@ module Bitcoind
     
     log4r.info("We've got enough funds to cover it")
 
-    res = CONN.sendfrom.call RESERVE_ADDRESS, dest_addr, amount
+    log4r.info("cmd sendrom #{RESERVE_ACCOUNT} #{dest_addr} #{amount} #{MIN_CONFIRMS}")
+    res = CONN.sendfrom.call RESERVE_ACCOUNT, dest_addr, amount, MIN_CONFIRMS
     log4r.info("Sent #{amount} from #{deal_name} to #{dest_addr}")
     log4r.info("GOT REPLY #{res}")
   rescue Exception => ex
