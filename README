@@ -1,13 +1,15 @@
 Todo
 ====
 
-*** Get full working system ***
+Optional release amount.
+
+Transactions.
+
+Admin Rake tasks.
 
 Setup proper validations on all models.
 
 Setup proper security on all controllers.
-
-Raise and handle app specific errors from lib/Bitcoind
 
 Move global options to lib/Config.
 
