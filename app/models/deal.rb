@@ -32,7 +32,7 @@ class Deal < ActiveRecord::Base
         log4r.info "Didn't move #{tx['txid']} yet, moving..."
         Bitcoind.deal_move_deposit uuid, tx['amount'], tx['txid']
         deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :tx_type => "DEPOSIT"
-        ReserveLineItem.new :credit => tx['amount'], :debit => 0, :note => tx['txid']
+        ReserveLineItem.new(:credit => tx['amount'], :debit => 0, :note => tx['txid']).save!
       end
     end
     
@@ -60,7 +60,7 @@ class Deal < ActiveRecord::Base
     if remaining_rake > 0
       log4r.info "Taking rake"
       deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
-      RakeLineItem.new :debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}"
+      RakeLineItem.new(:debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}").save!
     else
       log4r.info "Rake good.  Skipping"
     end
@@ -73,7 +73,7 @@ class Deal < ActiveRecord::Base
     log4r.info ("Adding debit to deal line items...")
     deal_line_items.create :debit => amount, :credit => 0, :tx_type => "RELEASE"
     log4r.info ("Adding debit to reserve account...")
-    RakeLineItem.new :debit => amount, :credit => 0, :note => "Release for #{uuid}"
+    ReserveLineItem.new(:debit => amount, :credit => 0, :note => "Release for #{uuid}").save!
   end
 
   def line_item_rakes
