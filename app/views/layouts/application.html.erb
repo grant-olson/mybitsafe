@@ -16,27 +16,18 @@
 <div class='sidebar_menu'>
 <% if user_signed_in? %>
 
+<%= link_to "My Deals", deals_path %>
 <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
 
-<%= link_to "My Deals", deals_path %>
 <% else %>
  
 <%= link_to "Sign Up", new_user_registration_path %>
 <%= link_to "Sign In", new_user_session_path %>
 <% end %>
-
-<a href='#'>About</a>
-<a href='#'>Contact</a>
-<a href='#'>Terms of Service</a>
 </div>
 </div>
 
 <div class='body'>
-<% if user_signed_in? %>
-<p>Howdy, <%= current_user.email %></p>
-<% else %>
-<p>Welcome to mybitsafe...</p>
-<% end %>
 
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
@@ -45,7 +36,11 @@
 </div>
 
 <div class='footer'>
-  About | blah | ToS | foo
+<%= link_to "About", root_path %>
+|
+<%= link_to "Contact", "mailto:kgo+support@grant-olson.net" %>
+|
+<%= link_to "Terms of Service", "#" %>
 </div>
 </body>
 </html>

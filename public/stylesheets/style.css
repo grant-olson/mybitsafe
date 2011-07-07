@@ -5,7 +5,7 @@ h1 { background-color:DodgerBlue; color:white; padding-left:2.5%;padding-right:2
 
 div.sidebar { width:10%; float:left; font-size:90%;}
 div.body {float:right;width:85%;border:2.5%;margin:2.5%;margin-top:0%}
-div.footer { clear:both; }
+div.footer { clear:both;text-align:center; }
 
 div.sidebar_menu {background-color:DodgerBlue; color:white; margin:5%;padding:5% }
 div.sidebar_menu a { color:white; font-weight:bold; }

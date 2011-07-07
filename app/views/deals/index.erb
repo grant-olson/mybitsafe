@@ -1,14 +1,24 @@
 <h1>New Deal</h1>
 
-<% form_for :deal, :url => deals_path do |deal_form| %>
-  <%= deal_form.label :note %>
-  <%= deal_form.text_field :note %><br />
-  <%= deal_form.label :release_address %>
-  <%= deal_form.text_field :release_address %><br />
-  <%= deal_form.submit "Create New Deal" %>
-<% end %>
+<p>To create a new deal, enter an optional note describing the
+transaction, and provide the seller's release address.  After the deal
+is created, you will be able to deposit funds.</p>
 
+<table>
+<% form_for :deal, :url => deals_path do |deal_form| %>
+ <tr><th> <%= deal_form.label :note %></th>
+  <td><%= deal_form.text_field :note %><br /></td></tr>
+  
+  <tr><th><%= deal_form.label :release_address %></th>
+  <td><%= deal_form.text_field :release_address %></td></tr>
+  
+  <tr><th><%= deal_form.submit "Create New Deal" %></th></tr>
+<% end %>
+</table>
+<br />
 <h1>Existing Deals</h1>
+<p>Click on an existing deal to view, add funds, or release coins.</p>
+
 <% @deals.each do |deal| %>
 <p>
   <%= link_to "#{ deal.note ? deal.note : '(no note)'} -  #{deal.release_address}", deal_path(deal.uuid) %>
