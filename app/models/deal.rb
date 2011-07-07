@@ -1,6 +1,8 @@
 class Deal < ActiveRecord::Base
   has_many :deal_line_items
 
+  class ReleaseFundsError < StandardError;end
+
   def log4r
     Log4r::Logger['deals']
   end
@@ -68,6 +70,16 @@ class Deal < ActiveRecord::Base
   end
 
   def release amount
+    amount = amount.to_f
+    
+    if amount < 0.1
+      raise ReleaseFundsError, "Amount must be greater than 0.01 BTC.  You tried to send #{amount}"
+    end
+
+    if amount > line_item_balance
+      raise ReleaseFundsError, "#{amount} is greater than available funds."
+    end
+    
     log4r.info ("Releasing #{amount}  via bitcoind...")
     Bitcoind.deal_pay uuid, release_address, amount
     log4r.info ("Adding debit to deal line items...")
