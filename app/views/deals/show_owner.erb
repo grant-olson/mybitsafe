@@ -14,7 +14,7 @@
 
 <%= form_for @deal, :url => deal_release_path(@deal.uuid) do |deal_form| %>
 <%= text_field_tag :release_amount, @confirmed_balance %>
-<%= deal_form.submit "Release", :confirm => "Are you sure you want to release all coins?" %>
+<%= deal_form.submit "Release", :confirm => "Are you sure you want to release these coins?" %>
 <% end %>
 
 <p>&nbsp;</p>
