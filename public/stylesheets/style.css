@@ -2,17 +2,20 @@ body { font-family: sans-serif; font-size:90%; padding:0%;margin:0%;border:0%}
 
 h1, h2, h3, h4, h5, h6 {font-family: monospace;}
 h1 { background-color:DodgerBlue; color:white; padding-left:2.5%;padding-right:2.5%;padding-top:0.5%;padding-bottom:0.5%; font-style:italic; margin-top:0%}
-h1 a { color:white; }
+h1 a { color:white;text-decoration:none; }
+h1 a:hover { color:yellow; }
 
 div.sidebar { width:10%; float:left; font-size:90%;}
 div.body {float:right;width:85%;border:2.5%;margin:2.5%;margin-top:0%}
 div.footer { clear:both;text-align:center; }
 
 div.sidebar_menu {background-color:DodgerBlue; color:white; margin:5%;padding:5% }
-div.sidebar_menu a { color:white; font-weight:bold; }
+div.sidebar_menu a { color:white; font-weight:bold;text-decoration:none; }
+div.sidebar_menu a:hover { color:yellow;}
 
 p.escrow_address {font-weight:bold; background-color:#CCC;padding:0.25em;text-align:center;display:inline;margin-left:auto;margin-right:auto}
 
 p.notice, p.alert {background-color:#CCC;border-color:black;color:red;font-weight:bold;}
 
 a {color:DodgerBlue;font-weight:bold;}
+a:hover {color:red;}
