@@ -15,7 +15,7 @@ gem 'mysql2', "~>0.2.0"
 gem 'unicorn', "~>4.0.1"
 
 #gem 'activerecord-mysql-adapter'
-#gem 'sqlite3'
+gem 'sqlite3'
 
 # Use unicorn as the web server
 # gem 'unicorn'
