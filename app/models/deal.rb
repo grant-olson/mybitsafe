@@ -85,6 +85,15 @@ class Deal < ActiveRecord::Base
       raise ReleaseFundsError, "#{amount} is greater than available funds."
     end
     
+    transactions = Bitcoind.deal_transactions self.uuid
+    receive = transactions.select { |tx| tx['category'] == 'receive' }
+    confirmed_receive = receive.select { |tx| tx['confirmations'] >= Bitcoind::MIN_CONFIRMS }
+    total_received = confirmed_receive.inject(0) { |a,b| a + b}
+    
+    if amount > total_received
+      raise RelaseFundsError, "Sanity check failed. #{amount} is greater than total depisited to this account"
+    end
+
     log4r.info ("Releasing #{amount}  via bitcoind...")
     Bitcoind.deal_pay uuid, release_address, amount
     log4r.info ("Adding debit to deal line items...")
