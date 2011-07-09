@@ -4,21 +4,35 @@
 <p><b>Available Balance:</b>
 <%= @confirmed_balance %>
 <i>(<%= @unconfirmed_balance %> pending)</i> </p>
+ 
+<% if @deal.expired? %>
 
+  <p><b>Deal expired on <%= @deal.expires_on %></b></p>
+<% else %>
+<p><b>Deal expires on:</b>
+<%= @deal.expires_on %> 
+ <i> (<%= "%.1f" % @deal.expires_in %> days from now</i>)</p>
+<% end %>
+
+<hr />
 
 <p>Add coins by sending to the <b>Escrow</b> address:</p>
 
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p class='escrow_address'><%= @deal.send_address %>  </p></div>
 
-<p>When you are ready to release coins, click release button.</p>
+<% if !@deal.expired? %>
+  <p>When you are ready to release coins, click release button.</p>
 
-<%= form_for @deal, :url => deal_release_path(@deal.uuid) do |deal_form| %>
-<%= text_field_tag :release_amount, @confirmed_balance %>
-<%= deal_form.submit "Release", :confirm => "Are you sure you want to release these coins?" %>
+  <%= form_for @deal, :url => deal_release_path(@deal.uuid) do |deal_form| %>
+  <%= text_field_tag :release_amount, @confirmed_balance %>
+  <%= deal_form.submit "Release", :confirm => "Are you sure you want to release these coins?" %>
+  <% end %>
+
 <% end %>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+  
 <hr />
 <h2>Deal History</h2>
 

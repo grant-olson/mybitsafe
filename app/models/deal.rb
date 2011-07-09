@@ -1,6 +1,8 @@
 class Deal < ActiveRecord::Base
   has_many :deal_line_items
 
+  EXPIRES_IN = 1 
+
   class ReleaseFundsError < StandardError;end
 
   def log4r
@@ -118,6 +120,18 @@ class Deal < ActiveRecord::Base
     return 0.0 if amounts.nil? || amounts.empty?
     
     return amounts.reduce { |a,b| a + b}
+  end
+
+  def expires_in
+    (expires_on - Time.now).to_f / (60 * 60 * 24).to_f
+  end
+
+  def expires_on
+    created_at + EXPIRES_IN.days
+  end
+  
+  def expired?
+    expires_on < Time.now()
   end
   
 end
