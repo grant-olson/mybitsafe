@@ -45,16 +45,19 @@ class Deal < ActiveRecord::Base
   def take_rake
     log4r.info "Taking rake..."
 
-    total_deposits = line_item_deposits.to_i
-
-    if total_deposits == 0
+    if line_item_deposits <= 0
       log4r.info "No deposits yet... No rake"
       return
     end
     
-    hundreds = (total_deposits / 100) + 1
-    expected_rake = hundreds.to_f * 0.025
-    log4r.info "Total Deposits #{total_deposits}, expected rake #{expected_rake}..."
+    expected_rake = 0.0
+    amount = line_item_deposits
+    while amount > 0
+      expected_rake += Const::RAKE_FEE
+      amount -= (100 + Const::RAKE_FEE)
+    end
+    
+    log4r.info "Total Deposits #{line_item_deposits}, expected rake #{expected_rake}..."
     
     total_rake = line_item_rakes
     log4r.info "Current rake #{total_rake}"
@@ -62,7 +65,7 @@ class Deal < ActiveRecord::Base
     remaining_rake = expected_rake - total_rake
 
     if remaining_rake > 0
-      log4r.info "Taking rake"
+      log4r.info "Taking rake #{remaining_rake}"
       deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
       RakeLineItem.new(:debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}").save!
     else
