@@ -5,7 +5,7 @@ gem 'rest-client', "~>1.6.3"
 gem 'log4r', "~>1.1.9"
 gem 'devise', "~>1.4.2"
 gem 'uuidtools', '~>2.1.2'
-gem 'hoptoad_notifier'
+gem 'hoptoad_notifier', "~>2.4.11"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
