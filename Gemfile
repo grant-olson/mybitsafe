@@ -11,6 +11,9 @@ gem 'hoptoad_notifier'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2', "~>0.2.0"
+
+gem 'unicorn', "~>4.0.1"
+
 #gem 'activerecord-mysql-adapter'
 #gem 'sqlite3'
 
