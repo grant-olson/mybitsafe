@@ -1,5 +1,6 @@
 class Deal < ActiveRecord::Base
   has_many :deal_line_items
+  belongs_to :user
 
   EXPIRES_IN = 1 
 
@@ -158,6 +159,33 @@ class Deal < ActiveRecord::Base
   
   def expired?
     expires_on < Time.now()
+  end
+
+  def self.pay_fountain
+    Deal.find(:all).each do |d|
+      next if !d.expired?
+      next if d.line_item_balance <= 0
+
+      puts "DEAL: #{d.note.inspect} For user #{d.user.email}"
+      puts "CREATED ON:  #{d.created_at}"
+      puts "EXPIRED ON: #{d.expires_on}"
+      puts "BALANCE: #{d.line_item_balance}"
+      print "Send to fountain? "
+      send_or_not = STDIN.gets
+      if send_or_not[0].downcase != 'y'
+        puts "NOT SENDING"
+      else
+        puts "SENDING"
+        balance = d.line_item_balance
+        Bitcoind.deal_pay Bitcoind::RESERVE_ACCOUNT, Const::FOUNTAIN_ADDRESS,  balance
+        ActiveRecord::Base.transaction do
+          d.deal_line_items.create :debit => balance, :credit => 0, :tx_type => "FOUNTAIN"
+          ReserveLineItem.new(:debit => balance, :credit => 0, :note => "FOUNTAIN Release for #{d.uuid}").save!
+        end
+        
+      end
+      
+    end
   end
   
 end

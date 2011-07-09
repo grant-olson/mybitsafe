@@ -120,8 +120,6 @@ module Bitcoind
 
     log4r.info("Address extracted from name is #{dest_addr}")
     
-    log4r.info("We've got enough funds to cover it")
-
     log4r.info("cmd sendfrom #{RESERVE_ACCOUNT} #{dest_addr} #{amount} #{MIN_CONFIRMS}")
     res = CONN.sendfrom.call RESERVE_ACCOUNT, dest_addr, amount.to_f, MIN_CONFIRMS
     log4r.info("Sent #{amount} from #{deal_name} to #{dest_addr}")
