@@ -35,8 +35,12 @@ class Deal < ActiveRecord::Base
       else
         log4r.info "Didn't move #{tx['txid']} yet, moving..."
         Bitcoind.deal_move_deposit uuid, tx['amount'], tx['txid']
-        deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :tx_type => "DEPOSIT"
-        ReserveLineItem.new(:credit => tx['amount'], :debit => 0, :note => tx['txid']).save!
+
+        ActiveRecord::Base.transaction do
+          deal_line_items.create :tx_id => tx['txid'], :credit => tx['amount'], :debit => 0, :tx_type => "DEPOSIT"
+          ReserveLineItem.new(:credit => tx['amount'], :debit => 0, :note => tx['txid']).save!
+        end
+        
       end
     end
     
@@ -66,8 +70,11 @@ class Deal < ActiveRecord::Base
 
     if remaining_rake > 0
       log4r.info "Taking rake #{remaining_rake}"
-      deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
-      RakeLineItem.new(:debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}").save!
+      
+      ActiveRecord::Base.transaction do
+        deal_line_items.create :debit => remaining_rake, :credit => 0, :tx_type => "RAKE"
+        RakeLineItem.new(:debit => 0, :credit => remaining_rake, :note => "Rake from #{uuid}").save!
+      end
     else
       log4r.info "Rake good.  Skipping"
     end
@@ -88,7 +95,10 @@ class Deal < ActiveRecord::Base
     transactions = Bitcoind.deal_transactions self.uuid
     receive = transactions.select { |tx| tx['category'] == 'receive' }
     confirmed_receive = receive.select { |tx| tx['confirmations'] >= Bitcoind::MIN_CONFIRMS }
-    total_received = confirmed_receive.inject(0) { |a,b| a + b}
+    confirmed_receive_amounts = confirmed_receive.map { |tx| tx['amount'] }
+    total_received = confirmed_receive_amounts.inject(0.0) { |a,b| a + b }
+
+    log4r.info "Total received for sanity check #{total_received}"
     
     if amount > total_received
       raise RelaseFundsError, "Sanity check failed. #{amount} is greater than total depisited to this account"
@@ -96,10 +106,14 @@ class Deal < ActiveRecord::Base
 
     log4r.info ("Releasing #{amount}  via bitcoind...")
     Bitcoind.deal_pay uuid, release_address, amount
-    log4r.info ("Adding debit to deal line items...")
-    deal_line_items.create :debit => amount, :credit => 0, :tx_type => "RELEASE"
-    log4r.info ("Adding debit to reserve account...")
-    ReserveLineItem.new(:debit => amount, :credit => 0, :note => "Release for #{uuid}").save!
+
+    ActiveRecord::Base.transaction do 
+      log4r.info ("Adding debit to deal line items...")
+      deal_line_items.create :debit => amount, :credit => 0, :tx_type => "RELEASE"
+      log4r.info ("Adding debit to reserve account...")
+      ReserveLineItem.new(:debit => amount, :credit => 0, :note => "Release for #{uuid}").save!
+    end
+    
   end
 
   def line_item_rakes
