@@ -65,5 +65,6 @@ Bestcrow::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
 
+  match '/terms_of_service', :controller => :home, :action => :terms_of_service, :as => :terms_of_service, :via => :get
   root :to => "home#index"
 end
