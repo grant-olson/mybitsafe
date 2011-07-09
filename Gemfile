@@ -10,7 +10,9 @@ gem 'hoptoad_notifier'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'mysql2', "~>0.2.0"
+#gem 'activerecord-mysql-adapter'
+#gem 'sqlite3'
 
 # Use unicorn as the web server
 # gem 'unicorn'
