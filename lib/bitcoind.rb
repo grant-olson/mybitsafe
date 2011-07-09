@@ -133,4 +133,9 @@ module Bitcoind
     CONN.move.call deal_name, RESERVE_ACCOUNT, amount, MIN_CONFIRMS, tx 
   end
 
+  def self.wallet_balance
+    log4r.info "Getting Wallet balance..."
+    CONN.getbalance.call
+  end
+  
 end
