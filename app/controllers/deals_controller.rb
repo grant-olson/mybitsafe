@@ -39,8 +39,12 @@ class DealsController < ApplicationController
   
   def release
     deal = Deal.find_by_uuid(params[:uuid])
+
+    raise Deal::ReleaseFundsError, "Wrong user!" if deal.user_id != current_user.id
+
     coins = params[:release_amount]
     deal.release coins
+
     flash[:alert] = "Released #{coins} to #{deal.release_address}..."
     redirect_to deals_path
   rescue Deal::ReleaseFundsError, Bitcoind::BitcoindRefusedRequest => ex
