@@ -16,4 +16,13 @@ namespace :mybitsafe do
   task :pay_fountain do
     Deal.pay_fountain
   end
+
+  task :pay_out do
+    payment_address = ENV['addr']
+    payment_amount = ENV['amount']
+
+    raise "USAGE: rake environment mybitsafe:pay_self amount=10 addr=124345342532453425" if payment_address.nil? or payment_amount.nil?
+    
+    RakeLineItem.pay_out payment_amount, payment_address
+  end
 end
