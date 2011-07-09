@@ -8,5 +8,10 @@ namespace :mybitsafe do
     rake_debit, rake_credit, rake_balance = RakeLineItem.get_balances
     puts "RAKE\t#{rake_debit}\t#{rake_credit}\t#{rake_balance}"
   end
+
+  task :book_tx_fees do
+    puts "Booking new tx fees..."
+    ReserveLineItem.book_tx_fees
+  end
   
 end
