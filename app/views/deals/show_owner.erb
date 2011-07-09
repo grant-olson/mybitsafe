@@ -37,15 +37,15 @@
 <h2>Deal History</h2>
 
 <table>
-<tr><th>Type</th><th>Debit</th><th>Credit</th><th>tx_id</th></tr>
+<tr><th>Type</th><th>Debit</th><th>Credit</th><th>Total</th></tr>
 <% @deal.deal_line_items.each do |line_item| %>
 
   <tr>
     <td><%= line_item.tx_type %></td>
     <td><%= line_item.debit %></td>
     <td><%= line_item.credit %></td>
-    <td><%= line_item.tx_id %></td>
+    <td></td>
   </tr>
 <% end %>
-
+<tr><th>Total</th><th></th><th></th><th><%= @deal.line_item_balance %></th></tr>
 </table>
