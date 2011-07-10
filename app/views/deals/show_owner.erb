@@ -20,6 +20,8 @@
 
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p class='escrow_address'><%= @deal.send_address %>  </p></div>
 
+<p>Please remember to include <%= link_to "our fee", fees_path %>  when sending coins.</p>
+
 <% if !@deal.expired? %>
   <p>When you are ready to release coins, click release button.</p>
 
