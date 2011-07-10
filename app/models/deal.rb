@@ -2,7 +2,7 @@ class Deal < ActiveRecord::Base
   has_many :deal_line_items
   belongs_to :user
 
-  EXPIRES_IN = 1 
+  EXPIRES_IN = 30 #days
 
   class ReleaseFundsError < StandardError;end
 
