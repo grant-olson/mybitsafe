@@ -40,6 +40,22 @@ module Bestcrow
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
-    config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+    config.action_mailer.default_url_options = { :host => 'mybitsafe.com' }
+
+    require 'tlsmail'
+    Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+    ActionMailer::Base.delivery_method = :smtp
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.raise_delivery_errors = true
+    ActionMailer::Base.smtp_settings = {
+      :enable_starttls_auto => true,
+      :address => 'smtp.gmail.com',
+      :port => 587,
+      :tls => true,
+      :domain => "mybitsafe.com",
+      :authentication => 'plain',
+      :user_name => 'noreply@mybitsafe.com',
+      :password => 'fiHykovcyfrulfib'
+    }
   end
 end
