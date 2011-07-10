@@ -3,8 +3,6 @@ Todo
 
 Setup proper validations on all models.
 
-Setup proper security on all controllers.
-
 Move global options to lib/Config.
 
 DB indexes and what not.
