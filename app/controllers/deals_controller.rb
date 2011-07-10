@@ -1,9 +1,20 @@
 class DealsController < ApplicationController
   def index
-    @deals = Deal.find_all_by_user_id(current_user.id)
+    if !current_user
+      flash[:alert] = "You must be logged in to access you deals..."
+      redirect_to root_path
+    else
+      @deals = Deal.find_all_by_user_id(current_user.id)
+    end
   end
 
   def create
+    if !current_user
+      flash[:alert] = "You must be logged in to create a deal..."
+      redirect_to root_path
+      return
+    end
+    
     release_address = params[:deal][:release_address]
     #raise params.inspect
     deal_name, address = Bitcoind.new_deal current_user.email, release_address
@@ -38,6 +49,12 @@ class DealsController < ApplicationController
   end
   
   def release
+    if !current_user
+      flash[:alert] = "You must be logged in to release funds..."
+      redirect_to root_path
+      return
+    end
+    
     deal = Deal.find_by_uuid(params[:uuid])
 
     raise Deal::ReleaseFundsError, "Wrong user!" if deal.user_id != current_user.id
