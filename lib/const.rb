@@ -1,4 +1,4 @@
 module Const
   RAKE_FEE = 0.025
-  FOUNTAIN_ADDRESS = "mytAJcuPZPY28Q6qhQ5mHsERcU6x9zrWWU"
+  FAUCET_ADDRESS = "15VjRaDX9zpbA8LVnbrCAFzrVzN7ixHNsC"
 end

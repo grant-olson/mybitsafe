@@ -13,8 +13,8 @@ namespace :mybitsafe do
     ReserveLineItem.book_tx_fees
   end
   
-  task :pay_fountain do
-    Deal.pay_fountain
+  task :pay_faucet do
+    Deal.pay_faucet
   end
 
   task :pay_out do

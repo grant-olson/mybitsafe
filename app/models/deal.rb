@@ -161,7 +161,7 @@ class Deal < ActiveRecord::Base
     expires_on < Time.now()
   end
 
-  def self.pay_fountain
+  def self.pay_faucet
     Deal.find(:all).each do |d|
       next if !d.expired?
       next if d.line_item_balance <= 0
@@ -170,17 +170,17 @@ class Deal < ActiveRecord::Base
       puts "CREATED ON:  #{d.created_at}"
       puts "EXPIRED ON: #{d.expires_on}"
       puts "BALANCE: #{d.line_item_balance}"
-      print "Send to fountain? "
+      print "Send to faucet? "
       send_or_not = STDIN.gets
       if send_or_not[0].downcase != 'y'
         puts "NOT SENDING"
       else
         puts "SENDING"
         balance = d.line_item_balance
-        Bitcoind.deal_pay Bitcoind::RESERVE_ACCOUNT, Const::FOUNTAIN_ADDRESS,  balance
+        Bitcoind.deal_pay Bitcoind::RESERVE_ACCOUNT, Const::FAUCET_ADDRESS,  balance
         ActiveRecord::Base.transaction do
-          d.deal_line_items.create :debit => balance, :credit => 0, :tx_type => "FOUNTAIN"
-          ReserveLineItem.new(:debit => balance, :credit => 0, :note => "FOUNTAIN Release for #{d.uuid}").save!
+          d.deal_line_items.create :debit => balance, :credit => 0, :tx_type => "FAUCET"
+          ReserveLineItem.new(:debit => balance, :credit => 0, :note => "FAUCET Release for #{d.uuid}").save!
         end
         
       end
