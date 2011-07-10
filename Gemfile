@@ -17,6 +17,8 @@ gem 'unicorn', "~>4.0.1"
 #gem 'activerecord-mysql-adapter'
 gem 'sqlite3'
 
+gem 'tlsmail'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
