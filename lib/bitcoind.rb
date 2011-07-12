@@ -58,7 +58,7 @@ module Bitcoind
   
   def self.deal_unconfirmed_balance deal_name
     transactions = deal_transactions deal_name, false
-    unconfirmed_recv_txs = transactions.select { |tx| tx['category'] == 'receive' && tx['confirmations'] == 0 }
+    unconfirmed_recv_txs = transactions.select { |tx| tx['category'] == 'receive' && tx['confirmations'] < MIN_CONFIRMS }
 
     return 0 if unconfirmed_recv_txs.nil? || unconfirmed_recv_txs.empty?
 
