@@ -25,4 +25,16 @@ namespace :mybitsafe do
     
     RakeLineItem.pay_out payment_amount, payment_address
   end
+
+  task :stats do
+    total_users = User.find(:all).length
+    new_users = User.find(:all).select { |u| u.created_at > (Time.now - 1.days) }.length
+
+    puts "USERS: #{total_users} (#{new_users} last 24 hours)"
+
+    total_deals = Deal.find(:all).length
+    new_deals = Deal.find(:all).select { |u| u.created_at > (Time.now - 1.days) }.length
+
+    puts "DEALS: #{total_deals} (#{new_deals} last 24 hours)"
+  end
 end
