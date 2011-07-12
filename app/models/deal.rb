@@ -149,6 +149,16 @@ class Deal < ActiveRecord::Base
     return amounts.reduce { |a,b| a + b}
   end
 
+  def line_item_released
+    released_line_items = deal_line_items.select do |li|
+      li.tx_type == "RELEASE"
+    end
+
+    released_amounts = released_line_items.map { |rli| rli.debit }
+    released_amounts.inject(0.0) { |a,b| a + b}
+  end
+  
+
   def expires_in
     (expires_on - Time.now).to_f / (60 * 60 * 24).to_f
   end

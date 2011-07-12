@@ -40,6 +40,7 @@ class DealsController < ApplicationController
     end
     
     @confirmed_balance = @deal.line_item_balance
+    @released_amount = @deal.line_item_released
 
     if current_user &&  current_user.id == @deal.user_id
       render :show_owner

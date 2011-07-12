@@ -1,16 +1,1 @@
-<p><b>Note:</b> <%= @deal.note ? @deal.note : "(no note)" %></p>
-<p><b>Release Address:</b> <%= @deal.release_address %></p>
-
-<p><b>Available Balance:</b>
-<%= @confirmed_balance %>
-<i>(<%= @unconfirmed_balance %> pending)</i> </p>
- 
-<% if @deal.expired? %>
-
-  <p><b>Deal expired on <%= @deal.expires_on %></b></p>
-<% else %>
-<p><b>Deal expires on:</b>
-<%= @deal.expires_on %> 
- <i> (<%= "%.1f" % @deal.expires_in %> days from now</i>)</p>
-<% end %>
-
+<%= render("header") %>
