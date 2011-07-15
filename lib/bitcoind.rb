@@ -3,7 +3,7 @@ module Bitcoind
   CONN = ServiceProxy.new("http://grant:test@127.0.0.1:8332")
   RAKE_RATE = 0.025
   RAKE_ACCOUNT = "the_rake"
-  MIN_CONFIRMS = 6
+  MIN_CONFIRMS = 3
   RESERVE_ACCOUNT = "0d99c148-21fa-4861-9ad8-a05f1f9c24a2"
 
   

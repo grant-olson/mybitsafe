@@ -10,8 +10,9 @@ BTC, send 5.025 BTC.  51.2 BTC, send 51.225 BTC.  200 BTC, send 200.05
 BTC.  And so on.</p>
 
 <p>If you do not include the fee, you will be short when the deposit
-is finally confirmed, and you'll have to wait another six
-confirmations to add the remaining amount.</p>
+is finally confirmed, and you'll have to wait another
+<%= Bitcoind::MIN_CONFIRMS %> confirmations to add the remaining
+amount.</p>
 
 <table class=fees>
 <tr><th>Amount</th><th>Fee</th></tr>
