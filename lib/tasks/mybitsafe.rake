@@ -29,8 +29,9 @@ namespace :mybitsafe do
   task :stats do
     total_users = User.find(:all).length
     new_users = User.find(:all).select { |u| u.created_at > (Time.now - 1.days) }.length
+    unconfirmed = User.find(:all).select { |u| u.confirmed_at.nil? }.length
 
-    puts "USERS: #{total_users} (#{new_users} last 24 hours)"
+    puts "USERS: #{total_users} (#{new_users} last 24 hours) (#{unconfirmed} unconfirmed)"
 
     total_deals = Deal.find(:all).length
     new_deals = Deal.find(:all).select { |u| u.created_at > (Time.now - 1.days) }.length
