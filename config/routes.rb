@@ -67,5 +67,6 @@ Bestcrow::Application.routes.draw do
 
   match '/terms_of_service', :controller => :home, :action => :terms_of_service, :as => :terms_of_service, :via => :get
   match '/fees', :controller => :home, :action => :fees, :as => :fees, :via => :get
+  match '/faq', :controller => :home, :action => :faq, :as => :faq, :via => :get
   root :to => "home#index"
 end
