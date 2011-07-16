@@ -24,3 +24,9 @@ a:hover {color:red;}
 
 table.fees {border:1pt solid black;}
 table.fees th, table.fees td { border:1pt solid grey; padding-left:0.5em;padding-right:0.5em;}
+
+a.fee_link { }
+a.fee_link:hover { color:DodgerBlue }
+
+a.fee_link div { display:none}
+a.fee_link:hover div { display:block;position:absolute;background-color:#EEE;color:DodgerBlue;right:28.5%;top:60%;}
