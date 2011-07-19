@@ -1,5 +1,7 @@
 class DealsController < ApplicationController
   def index
+    @title = "My Deals"
+
     if !current_user
       flash[:alert] = "You must be logged in to access you deals..."
       redirect_to root_path
@@ -29,6 +31,7 @@ class DealsController < ApplicationController
   end
   
   def show
+    @title = "Deal #{params[:uuid]}"
     @deal = Deal.find_by_uuid(params[:uuid])
     @deal.move_deposits_to_reserve
     @deal.take_rake

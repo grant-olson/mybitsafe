@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>mybitsafe</title>
+  <% if @title %>
+    <title>mybitsafe - <%= @title %></title>
+  <% else %>
+    <title>mybitsafe</title>
+  <% end %>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
