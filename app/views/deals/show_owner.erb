@@ -1,6 +1,6 @@
 <%= render("header") %>
 
-<hr />
+<p class="privacy_notice">The information below this line will only be seen by you, and only when you are logged in.</p>
 
 <p>Add coins by sending to the <b>Escrow</b> address:</p>
 
@@ -18,8 +18,11 @@
 
 <% end %>
 
-<p>You can use <%= link_to "this link", deal_path(@deal.uuid) %> to
-show your counterparty that funds have been deposited. </p>
+<p>You'll want to provide your counter-party with a <%= link_to "link
+to this page", deal_path(@deal.uuid) %>.  They can use this link to
+verify that the release address is correct, that funds have been
+deposited, if funds have been released, and other important
+information about this deal. </p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>

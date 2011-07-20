@@ -19,6 +19,8 @@ p.escrow_address {font-weight:bold; background-color:#CCC;padding:0.25em;text-al
 
 p.notice, p.alert {background-color:#CCC;border-color:black;color:red;font-weight:bold;}
 
+p.privacy_notice {font-size:75%;font-style:italics;border:1pt solid black;background-color:#DDDDDD;}
+
 a {color:DodgerBlue;font-weight:bold;}
 a:hover {color:red;}
 

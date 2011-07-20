@@ -37,11 +37,13 @@ class DealsController < ApplicationController
     @deal.take_rake
 
     begin
-      @unconfirmed_balance = Bitcoind.deal_unconfirmed_balance @deal.uuid
+      unconfirmed_balance = Bitcoind.deal_unconfirmed_balance_by_confirms @deal.uuid
     rescue Bitcoind::BitcoindDown => ex
-      @unconfirmed_balance = "????"
+      unconfirmed_balance = ["????"]
     end
-    
+   
+    @unconfirmed_balance = unconfirmed_balance.map { |li| "#{li[1].to_s} awaiting #{li[0].to_s} confirmations"}
+
     @confirmed_balance = @deal.line_item_balance
     @released_amount = @deal.line_item_released
 

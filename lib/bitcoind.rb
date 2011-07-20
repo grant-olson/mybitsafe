@@ -70,6 +70,27 @@ module Bitcoind
     rewrite_exception ex
   end
   
+  def self.deal_unconfirmed_balance_by_confirms deal_name
+    transactions = deal_transactions deal_name, false
+
+    results = {}
+
+    transactions.each do |tx|
+      next if tx['category'] != 'receive'
+      next if tx['confirmations'] >= MIN_CONFIRMS
+
+      confirm = MIN_CONFIRMS - tx['confirmations']
+      amount = tx['amount']
+
+      results[confirm] = 0.0 if !results.has_key?(tx['confirmations'])
+      results[confirm] += amount
+    end
+    
+    results = results.to_a.sort { |a,b| a[0] <=> b[0] }
+    results.reverse
+  end
+  
+
   def self.deal_transactions deal_name, confirmed = true
     log4r.info("Getting transactions for #{deal_name}")
     min_confirms = MIN_CONFIRMS
