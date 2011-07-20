@@ -82,7 +82,7 @@ module Bitcoind
       confirm = MIN_CONFIRMS - tx['confirmations']
       amount = tx['amount']
 
-      results[confirm] = 0.0 if !results.has_key?(tx['confirmations'])
+      results[confirm] = 0.0 if !results.has_key?(confirm)
       results[confirm] += amount
     end
     
