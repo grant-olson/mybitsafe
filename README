@@ -7,5 +7,6 @@ Move global options to lib/Config.
 
 DB indexes and what not.
 
-Figure out how to do https only.
+Search for pending deals.
 
+Rake task to balance books for unclaimed deposits.
