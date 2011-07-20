@@ -3,7 +3,9 @@
 
 <p><b>Available Balance:</b>
 <%= @confirmed_balance %>
-<i>(<%= @unconfirmed_balance %> pending)</i> </p>
+<% if !@unconfirmed_balance.empty? %>
+  <i>(<%= @unconfirmed_balance.join (", ") %>)</i> </p>
+<% end %>
 
 <% if @released_amount && @released_amount > 0.0 %>
   <p><b>Released Amount:</b>
