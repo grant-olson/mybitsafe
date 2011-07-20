@@ -8,6 +8,13 @@ namespace :mybitsafe do
     puts "WALLET\t\t\t%.4f" % Bitcoind.wallet_balance
   end
 
+  task :balance_books do
+    puts "balancing deal books..."
+    Deal.balance_books
+    puts "Booking new tx fees..."
+    ReserveLineItem.book_tx_fees
+  end
+
   task :book_tx_fees do
     puts "Booking new tx fees..."
     ReserveLineItem.book_tx_fees

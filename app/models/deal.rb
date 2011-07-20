@@ -197,5 +197,12 @@ class Deal < ActiveRecord::Base
       
     end
   end
+
+  def self.balance_books
+    Deal.find(:all).each do |d|
+      d.move_deposits_to_reserve
+      d.take_rake
+    end
+  end
   
 end
