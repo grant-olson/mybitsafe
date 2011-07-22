@@ -1,0 +1,10 @@
+<table>
+<tr><th>Note</th><th>Release Address</th><th>Balance</th><th>Expire Date</th></tr>
+<% @deals.each do |deal| %>
+   <tr>
+   <td> <%= link_to "#{ deal.note ? deal.note : '(no note)'}", deal_path(deal.uuid)%> </td>
+   <td> <%=deal.release_address %></td>
+   <td> <%= "%.2f" % deal.line_item_balance %> </td>
+   <td> <%= deal.expires_on.strftime("%d-%b-%Y") %></td>
+<% end %>
+</table>

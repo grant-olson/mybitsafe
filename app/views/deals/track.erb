@@ -1,0 +1,22 @@
+<h2>Track Deal</h2>
+
+<p>If you are a seller who has lost the deal link provided by a buyer,
+you can search by providing your payment address.</p>
+
+<% form_for :deal, :url => deal_track_path do |f| %>
+<%= f.label :release_address %>
+<%= f.text_field :release_address %>
+<%= f.submit "search" %>
+<% end %>
+
+<% if @deals %>
+<hr />
+
+<h1>Deals</h1>
+  <% if @deals.empty? %>
+    <h3>Sorry, no deals found for release address <%= @address.inspect %></h3>
+  <% else %>
+    <%= render("deal_table") %>
+  <% end %>
+
+<% end %>

@@ -75,5 +75,15 @@ class DealsController < ApplicationController
     redirect_to deal_path(deal.uuid)
 
   end
+
+  def track
+
+    if params && params['deal'] && params['deal']['release_address']
+      release_address = params['deal']['release_address'].strip
+      @address = release_address
+      @deals = Deal.find_unexpired_by_release_address release_address
+    end
+    
+  end
   
 end

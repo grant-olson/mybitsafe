@@ -32,6 +32,9 @@
 <div class='sidebar'>
 
 <div class='sidebar_menu'>
+
+<div><%= link_to "Track..." , deal_track_path %></div>
+
 <% if user_signed_in? %>
 
 <div><%= link_to "My Deals", deals_path %></div>

@@ -204,5 +204,11 @@ class Deal < ActiveRecord::Base
       d.take_rake
     end
   end
-  
+
+  def self.find_unexpired_by_release_address address
+    address_deals = Deal.find_all_by_release_address address
+    new_address_deals = address_deals.select { |d| !d.expired? }
+    new_address_deals
+  end
+
 end

@@ -19,13 +19,4 @@ is created, you will be able to deposit funds.</p>
 <h1>Existing Deals</h1>
 <p>Click on an existing deal to view, add funds, or release coins.</p>
 
-<table>
-<tr><th>Note</th><th>Release Address</th><th>Balance</th><th>Expire Date</th></tr>
-<% @deals.each do |deal| %>
-   <tr>
-   <td> <%= link_to "#{ deal.note ? deal.note : '(no note)'}", deal_path(deal.uuid)%> </td>
-   <td> <%=deal.release_address %></td>
-   <td> <%= "%.2f" % deal.line_item_balance %> </td>
-   <td> <%= deal.expires_on.strftime("%d-%b-%Y") %></td>
-<% end %>
-</table>
+<%= render("deal_table") %>
