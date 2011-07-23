@@ -33,6 +33,9 @@ class DealsController < ApplicationController
   def show
     @title = "Deal #{params[:uuid]}"
     @deal = Deal.find_by_uuid(params[:uuid])
+
+    raise ActionController::RoutingError.new('Deal #{params[:uuid]} Not Found') if @deal.nil?
+
     @deal.move_deposits_to_reserve
     @deal.take_rake
 
