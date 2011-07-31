@@ -31,8 +31,14 @@ class DealsController < ApplicationController
   end
   
   def show
-    @title = "Deal #{params[:uuid]}"
+
     @deal = Deal.find_by_uuid(params[:uuid])
+
+    if @deal.note.nil? || @deal.note.empty?
+      @title = "Deal #{params[:uuid]}"
+    else
+      @title = @deal.note
+    end
 
     raise ActionController::RoutingError.new('Deal #{params[:uuid]} Not Found') if @deal.nil?
 
