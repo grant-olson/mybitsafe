@@ -1,5 +1,5 @@
 Bestcrow::Application.routes.draw do
-  devise_for :users
+  devise_for :users, :controllers => { :registrations => "registrations" }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -69,5 +69,6 @@ Bestcrow::Application.routes.draw do
   match '/terms_of_service', :controller => :home, :action => :terms_of_service, :as => :terms_of_service, :via => :get
   match '/fees', :controller => :home, :action => :fees, :as => :fees, :via => :get
   match '/faq', :controller => :home, :action => :faq, :as => :faq, :via => :get
+  match '/need_confirmation', :controller => :home, :action => :need_confirmation, :as => :need_confirmation, :via => :get
   root :to => "home#index"
 end

@@ -16,5 +16,9 @@ class HomeController < ApplicationController
   def faq
     @title = "Frequently Asked Questions"
   end
+
+  def need_confirmation
+    @title = "Awaiting email confirmation"
+  end
   
 end
