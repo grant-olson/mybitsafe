@@ -7,6 +7,3 @@ Move global options to lib/Config.
 
 DB indexes and what not.
 
-Search for pending deals.
-
-Rake task to balance books for unclaimed deposits.
