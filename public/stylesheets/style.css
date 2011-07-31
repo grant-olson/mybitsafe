@@ -26,3 +26,5 @@ a:hover {color:red;}
 
 table.fees {border:1pt solid black;}
 table.fees th, table.fees td { border:1pt solid grey; padding-left:0.5em;padding-right:0.5em;}
+
+div.calculator { width:300px;background-color:#eee; padding:10px;font-weight:bold; border:2pt solid #ccc;}

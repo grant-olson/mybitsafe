@@ -6,7 +6,7 @@
 
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p class='escrow_address'><%= @deal.send_address %>  </p></div>
 
-<p>Please remember to include <%= link_to "our fee", fees_path %>  when sending coins.</p>
+<p>Please remember to include <span id="fee_link"><%= link_to "our fee", fees_path %></span>  when sending coins.</p>
 
 <% if !@deal.expired? %>
   <p>When you are ready to release coins, click release button.</p>
@@ -43,3 +43,20 @@ information about this deal. </p>
 <% end %>
 <tr><th>Total</th><th></th><th></th><th><%= @deal.line_item_balance %></th></tr>
 </table>
+
+<div class='calculator' id='calculator' > 
+
+<p>For any deal under 100 BTC, just add 0.025 to the original amount.  For example: <p>
+
+<ul> <li>To escrow 3 BTC, deposit 3.025.</li>
+
+<li>To escrow 55.5 BTC, deposit 55.525.</li>
+<li>Etc.</li>
+</ul>
+
+ </div>
+
+<script type="text/javascript">
+var my_tooltip = new Tooltip('fee_link', 'calculator')
+</script>
+
