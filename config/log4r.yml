@@ -42,6 +42,15 @@ log4r_config:
         - logfile
         - chainsaw
 
+    - name: api
+      level: DEBUG
+      additive: 'false'
+      trace: 'false'
+      outputters:
+        - stdout
+        - logfile
+        - chainsaw
+
   # outputters and formatters
   outputters:
   - type: StderrOutputter

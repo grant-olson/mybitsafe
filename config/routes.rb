@@ -23,6 +23,12 @@ Bestcrow::Application.routes.draw do
   match '/deals/:uuid(.:format)', :controller => :deals, :action => :show, :as => :deal, :via => :get
   match '/deals/:uuid/release', :controller => :deals, :action => :release, :as => :deal_release , :via => :put
 
+# API
+
+  match '/api/create', :controller => :api, :action => :create, :as => :api, :via => :post
+  match '/api/deal_info', :controller => :api, :action => :deal_info, :as => :api, :via => :post
+  match '/api/release_funds', :controller => :api, :action => :release_funds, :as => :api, :via => :post
+  match '/api/list_deals', :controller => :api, :action => :list_deals, :as => :api, :via => :post
   # Sample resource route with options:
   #   resources :products do
   #     member do
