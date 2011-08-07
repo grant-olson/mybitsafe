@@ -11,6 +11,7 @@ class ApiController < ApplicationController
       deal_name, address = Bitcoind.new_deal user.email, release_address
       deal = Deal.create :user_id => user.id, :uuid => deal_name, :send_address => address, :release_address => release_address, :note => note
 
+      log4r.info "Crated deal #{deal.inspect}"
       render :text => ({:deal => deal.uuid}.to_json) , :status => 200
     end
     
@@ -26,6 +27,7 @@ class ApiController < ApplicationController
       deal_info = { :uuid => deal.uuid, :release_address => deal.release_address,
         :note => deal.note, :send_address => deal.send_address, :balance => deal.line_item_balance, :unconfirmed_balance => unconfirmed_balance}
       
+      log4r.info "Got deal info for #{deal.inspect}"
       render :text => ({:deal => deal_info}.to_json), :status => 200
     end
   end
@@ -33,6 +35,7 @@ class ApiController < ApplicationController
   def list_deals
     if user = auth_user
       uuids = Deal.find_all_by_user_id(user.id).map { |d| d.uuid }
+      log4r.info "Listed deals for #{user.email.inspect}"
       render :text => {:deals => uuids}.to_json, :status => 200
     end
   end
@@ -42,7 +45,8 @@ class ApiController < ApplicationController
       deal = get_deal
       amount = params["amount"]
       deal.release amount.to_f
-
+      
+      log4r.info "Released #{amount.inspect} From #{deal.uuid.inspect} #{deal.note.inspect}"
       render :text => {:amount => amount}, :status => 200
     end
   end
@@ -57,6 +61,7 @@ class ApiController < ApplicationController
 
     user = User.find_by_email(email)
     if user.nil? || api_key.nil? || api_key.empty? || user.api_key != api_key
+      log4r.error "Authentication failure #{params.inspect}"
       render :text => "Forbidden", :status => 403
       return nil
     else
