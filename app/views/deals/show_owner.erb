@@ -8,6 +8,12 @@
 
 <p>Please remember to include <span id="fee_link"><%= link_to "our fee", fees_path %></span>  when sending coins.</p>
 
+<p><b>Warning:</b><i>Once you send bitcoins to this address they can
+only be released or donated to charity.  You will not be able to
+recover the bitcoins if your deal falls through.  Please make sure
+you've finalized all of your deal details with the seller before
+sending any bitcoins to mybitsafe.</i></p>
+
 <% if !@deal.expired? %>
   <p>When you are ready to release coins, click release button.</p>
 
