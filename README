@@ -1,9 +1,0 @@
-Todo
-====
-
-Setup proper validations on all models.
-
-Move global options to lib/Config.
-
-DB indexes and what not.
-
